@@ -28,7 +28,7 @@ Shader "Unlit/PotionShader"
             #pragma multi_compile_fog
 
             #define STEPS 32
-            #define LIGHT_STEPS 16
+            #define LIGHT_STEPS 32
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -87,6 +87,7 @@ Shader "Unlit/PotionShader"
                 float sampleX = height * _WaveFrequency - _Time.y * _WaveSpeed;
                 float2 offset = float2(snoise(float2(sampleX, 1)), snoise(float2(sampleX, 2)));
                 offset -= float2(0.5,0.5);
+                offset *= height / _BottleHeight;
                 return offset * _WaveAmplitude;
             }
 
