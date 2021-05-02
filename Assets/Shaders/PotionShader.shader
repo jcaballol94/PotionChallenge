@@ -25,6 +25,7 @@ Shader "Unlit/PotionShader"
             #pragma multi_compile_fog
 
             #define STEPS 32
+            #define LIGHT_STEPS 16
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -80,6 +81,28 @@ Shader "Unlit/PotionShader"
                 return _NormalColor;
             }
 
+            
+            float LightRaycast (float3 worldPos, float3 lightDir)
+            {
+                float lightIntensity = 1;
+                float stepLength = _BottleRadius * 2 / (float)LIGHT_STEPS;
+                for (int i = 0; i < LIGHT_STEPS; ++i) {
+                    float3 pos = worldPos + lightDir * stepLength * i;
+                    if (InObstacle(pos)) {
+                        lightIntensity = 0;
+                        break;
+                    }
+                    
+                    if (Outside(pos))
+                        break;
+
+                    float4 type = GetType(pos);
+                    lightIntensity *= (1 - type.a);
+                }
+
+                return lightIntensity;
+            }
+
             float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightColor)
             {
                 float4 finalColor = float4(0,0,0,0);
@@ -89,8 +112,10 @@ Shader "Unlit/PotionShader"
                     if (InObstacle(pos) || Outside(pos))
                         break;
 
+                    float lightIntensity = LightRaycast(pos, lightDir);
+
                     float4 type = GetType(pos);
-                    type.rgb *= lightColor;
+                    type.rgb *= lightColor * lightIntensity;
                     type.rgb *= type.a;
                     finalColor += (1 - finalColor.a) * type;
                 }
