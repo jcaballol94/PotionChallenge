@@ -14,6 +14,9 @@ Shader "Unlit/PotionShader"
         _NoiseSpeed("Noise Speed", Float) = 2
         _NoiseFrequency("Noise Freq", Float) = 1
         _NoiseAmplitude("Noise Ampl", Float) = 1
+        _RipplesSpeed("Ripples Speed", Float) = 2
+        _RipplesFrequency("Ripples Freq", Float) = 1
+        _RipplesAmplitude("Ripples Ampl", Float) = 1
         _Obstacle("Obstacle", Vector) = (0,0,0,1)
     }
     SubShader
@@ -50,6 +53,9 @@ Shader "Unlit/PotionShader"
             float _NoiseSpeed;
             float _NoiseFrequency;
             float _NoiseAmplitude;
+            float _RipplesSpeed;
+            float _RipplesFrequency;
+            float _RipplesAmplitude;
             float4 _Obstacle;
 
             struct appdata
@@ -97,21 +103,20 @@ Shader "Unlit/PotionShader"
                 return offset * _WaveAmplitude;
             }
 
-            float GetNoise(float3 worldPos)
+            float GetNoise(float3 worldPos, float speed, float frequency, float amplitude)
             {
-                float size = _NoiseFrequency * worldPos.y / _BottleHeight;
-                worldPos.y -= _Time.y * _NoiseSpeed;
-                float noise = snoise(worldPos);
-                noise *= _NoiseAmplitude;
+                float size = worldPos.y / _BottleHeight;
+                worldPos.y -= _Time.y * speed;
+                float noise = snoise(worldPos * frequency);
+                noise *= amplitude;
                 return noise * size;
             }
 
             float GetDist(float3 worldPos)
             {
-                float noise = GetNoise(worldPos);
-                float dist = _FoamHeight - worldPos.y;
-                dist = min(dist, length(worldPos.xz - GetWiggleOffset(worldPos.y)) - _FoamRadius);
-                return dist - noise;
+                float dist = _FoamHeight - worldPos.y - GetNoise(worldPos, _RipplesSpeed, _RipplesFrequency, _RipplesAmplitude);
+                dist = min(dist, length(worldPos.xz - GetWiggleOffset(worldPos.y)) - _FoamRadius - GetNoise(worldPos, _NoiseSpeed, _NoiseFrequency, _NoiseAmplitude));
+                return dist;
             }
             
             float LightRaycast (float3 worldPos, float3 lightDir)
