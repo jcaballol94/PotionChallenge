@@ -57,16 +57,25 @@ Shader "Unlit/PotionShader"
                 return o;
             }
 
+            bool InObstacle(float3 worldPos)
+            {
+                if (length(worldPos - _Obstacle.xyz) < _Obstacle.w) 
+                    return true;
+                return false;
+            }
+
+            bool Outside (float3 worldPos)
+            {
+                if (worldPos.y < 0 || worldPos.y > _BottleHeight ||
+                    length(worldPos.xz) > _BottleRadius)
+                    return true;
+                return false;
+            }
+
             float4 GetType(float3 worldPos)
             {
-                float radius = length(worldPos.xz);
-                if (worldPos.y < 0 || worldPos.y > _BottleHeight ||
-                    radius > _BottleRadius) {
-                    return float4(0,0,0,0);
-                }
-                if (worldPos.y > _FoamHeight || radius < _FoamRadius) {
+                if (worldPos.y > _FoamHeight || length(worldPos.xz) < _FoamRadius)
                     return _EffectColor;
-                }
                 return _NormalColor;
             }
 
@@ -76,7 +85,7 @@ Shader "Unlit/PotionShader"
                 float stepLength = _BottleRadius * 2 / (float)STEPS;
                 for (int i = 0; i < STEPS; ++i) {
                     float3 pos = worldPos + viewDir * stepLength * i;
-                    if (length(pos - _Obstacle.xyz) < _Obstacle.w) 
+                    if (InObstacle(pos) || Outside(pos))
                         break;
 
                     float4 type = GetType(pos);
