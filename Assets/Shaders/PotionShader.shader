@@ -8,6 +8,7 @@ Shader "Unlit/PotionShader"
         _BottleHeight("Bottle Height", Float) = 2
         _FoamHeight("Foam Height", Float) = 1
         _FoamRadius("Foam Radius", Float) = 0.5
+        _Obstacle("Obstacle", Vector) = (0,0,0,1)
     }
     SubShader
     {
@@ -33,6 +34,7 @@ Shader "Unlit/PotionShader"
             float _BottleHeight;
             float _FoamHeight;
             float _FoamRadius;
+            float4 _Obstacle;
 
             struct appdata
             {
@@ -73,7 +75,11 @@ Shader "Unlit/PotionShader"
                 float4 finalColor = float4(0,0,0,0);
                 float stepLength = _BottleRadius * 2 / (float)STEPS;
                 for (int i = 0; i < STEPS; ++i) {
-                    float4 type = GetType(worldPos + viewDir * stepLength * i);
+                    float3 pos = worldPos + viewDir * stepLength * i;
+                    if (length(pos - _Obstacle.xyz) < _Obstacle.w) 
+                        break;
+
+                    float4 type = GetType(pos);
                     type.rgb *= type.a;
                     finalColor += (1 - finalColor.a) * type;
                 }
