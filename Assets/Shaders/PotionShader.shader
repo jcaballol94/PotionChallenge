@@ -103,20 +103,20 @@ Shader "Unlit/PotionShader"
                 return noise * _NoiseSize;
             }
 
-            float4 GetType(float3 worldPos)
+            float GetDist(float3 worldPos)
             {
                 float noise = GetNoise(worldPos);
-
-                if (worldPos.y > _FoamHeight - noise || length(worldPos.xz - GetWiggleOffset(worldPos.y)) < _FoamRadius + noise)
-                    return _EffectColor;
-                return _NormalColor;
+                float dist = _FoamHeight - worldPos.y;
+                dist = min(dist, length(worldPos.xz - GetWiggleOffset(worldPos.y)) - _FoamRadius);
+                return dist - noise;
             }
-
             
             float LightRaycast (float3 worldPos, float3 lightDir)
             {
                 float lightIntensity = 1;
                 float stepLength = _BottleRadius * 2 / (float)LIGHT_STEPS;
+                float4 prevType = _NormalColor;
+                float prevDist = 0;
                 for (int i = 0; i < LIGHT_STEPS; ++i) {
                     float3 pos = worldPos + lightDir * stepLength * i;
                     if (InObstacle(pos)) {
@@ -127,7 +127,11 @@ Shader "Unlit/PotionShader"
                     if (Outside(pos))
                         break;
 
-                    float4 type = GetType(pos);
+                    float newDist = GetDist(pos);
+                    float4 newColor = lerp(_EffectColor, _NormalColor, step(0, newDist));
+                    float4 type = lerp(prevType, newColor, 1 - smoothstep(prevDist, newDist, 0));
+                    prevDist = newDist;
+                    prevType = newColor;
                     lightIntensity *= (1 - type.a);
                 }
 
@@ -137,6 +141,8 @@ Shader "Unlit/PotionShader"
             float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightColor)
             {
                 float4 finalColor = float4(0,0,0,0);
+                float4 prevType = _NormalColor;
+                float prevDist = 0;
                 float stepLength = _BottleRadius * 2 / (float)STEPS;
                 for (int i = 0; i < STEPS; ++i) {
                     float3 pos = worldPos + viewDir * stepLength * i;
@@ -145,7 +151,12 @@ Shader "Unlit/PotionShader"
 
                     float lightIntensity = LightRaycast(pos, lightDir);
 
-                    float4 type = GetType(pos);
+                    float newDist = GetDist(pos);
+                    float4 newColor = lerp(_EffectColor, _NormalColor, step(0, newDist));
+                    float4 type = lerp(prevType, newColor, 1 - smoothstep(prevDist, newDist, 0));
+                    prevDist = newDist;
+                    prevType = newColor;
+
                     type.rgb *= lightColor * lightIntensity;
                     type.rgb *= type.a;
                     finalColor += (1 - finalColor.a) * type;
