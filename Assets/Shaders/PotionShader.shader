@@ -12,7 +12,8 @@ Shader "Unlit/PotionShader"
         _WaveFrequency("Wave Freq", Float) = 1
         _WaveAmplitude("Wave Ampl", Float) = 1
         _NoiseSpeed("Noise Speed", Float) = 2
-        _NoiseSize("Noise Size", Float) = 1
+        _NoiseFrequency("Noise Freq", Float) = 1
+        _NoiseAmplitude("Noise Ampl", Float) = 1
         _Obstacle("Obstacle", Vector) = (0,0,0,1)
     }
     SubShader
@@ -47,7 +48,8 @@ Shader "Unlit/PotionShader"
             float _WaveFrequency;
             float _WaveAmplitude;
             float _NoiseSpeed;
-            float _NoiseSize;
+            float _NoiseFrequency;
+            float _NoiseAmplitude;
             float4 _Obstacle;
 
             struct appdata
@@ -97,10 +99,11 @@ Shader "Unlit/PotionShader"
 
             float GetNoise(float3 worldPos)
             {
+                float size = _NoiseFrequency * worldPos.y / _BottleHeight;
                 worldPos.y -= _Time.y * _NoiseSpeed;
                 float noise = snoise(worldPos);
-                noise -= 0.5;
-                return noise * _NoiseSize;
+                noise *= _NoiseAmplitude;
+                return noise * size;
             }
 
             float GetDist(float3 worldPos)
