@@ -8,6 +8,9 @@ Shader "Unlit/PotionShader"
         _BottleHeight("Bottle Height", Float) = 2
         _FoamHeight("Foam Height", Float) = 1
         _FoamRadius("Foam Radius", Float) = 0.5
+        _WaveSpeed("Wave Speed", Float) = 1
+        _WaveFrequency("Wave Freq", Float) = 1
+        _WaveAmplitude("Wave Ampl", Float) = 1
         _Obstacle("Obstacle", Vector) = (0,0,0,1)
     }
     SubShader
@@ -29,6 +32,8 @@ Shader "Unlit/PotionShader"
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
+            #include "Noise2D.cginc"
+            #include "Noise3D.cginc"
 
             float4 _NormalColor;
             float4 _EffectColor;
@@ -36,6 +41,9 @@ Shader "Unlit/PotionShader"
             float _BottleHeight;
             float _FoamHeight;
             float _FoamRadius;
+            float _WaveSpeed;
+            float _WaveFrequency;
+            float _WaveAmplitude;
             float4 _Obstacle;
 
             struct appdata
@@ -74,9 +82,17 @@ Shader "Unlit/PotionShader"
                 return false;
             }
 
+            float2 GetWiggleOffset(float height)
+            {
+                float sampleX = height * _WaveFrequency - _Time.y * _WaveSpeed;
+                float2 offset = float2(snoise(float2(sampleX, 1)), snoise(float2(sampleX, 2)));
+                offset -= float2(0.5,0.5);
+                return offset * _WaveAmplitude;
+            }
+
             float4 GetType(float3 worldPos)
             {
-                if (worldPos.y > _FoamHeight || length(worldPos.xz) < _FoamRadius)
+                if (worldPos.y > _FoamHeight || length(worldPos.xz - GetWiggleOffset(worldPos.y)) < _FoamRadius)
                     return _EffectColor;
                 return _NormalColor;
             }
