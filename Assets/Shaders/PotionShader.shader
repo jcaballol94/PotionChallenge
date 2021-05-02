@@ -8,7 +8,7 @@ Shader "Unlit/PotionShader"
     SubShader
     {
         Tags { "RenderType"="Transparent" "RenderQueue"="Transparent" }
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha
         LOD 100
 
         Pass
@@ -20,6 +20,9 @@ Shader "Unlit/PotionShader"
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+
+            float4 _NormalColor;
+            float4 _EffectColor;
 
             struct appdata
             {
@@ -43,7 +46,7 @@ Shader "Unlit/PotionShader"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                return fixed4(0,1,1,0.5);
+                return fixed4(_NormalColor);
             }
             ENDCG
         }
