@@ -27,6 +27,7 @@ Shader "Unlit/PotionShader"
             #define STEPS 32
 
             #include "UnityCG.cginc"
+            #include "UnityLightingCommon.cginc"
 
             float4 _NormalColor;
             float4 _EffectColor;
@@ -79,7 +80,7 @@ Shader "Unlit/PotionShader"
                 return _NormalColor;
             }
 
-            float4 RayCast (float3 worldPos, float3 viewDir)
+            float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightColor)
             {
                 float4 finalColor = float4(0,0,0,0);
                 float stepLength = _BottleRadius * 2 / (float)STEPS;
@@ -89,6 +90,7 @@ Shader "Unlit/PotionShader"
                         break;
 
                     float4 type = GetType(pos);
+                    type.rgb *= lightColor;
                     type.rgb *= type.a;
                     finalColor += (1 - finalColor.a) * type;
                 }
@@ -98,7 +100,7 @@ Shader "Unlit/PotionShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return RayCast(i.worldPos, normalize(i.worldPos - _WorldSpaceCameraPos));
+                return RayCast(i.worldPos, normalize(i.worldPos - _WorldSpaceCameraPos), _WorldSpaceLightPos0.xyz, _LightColor0.rgb);
             }
             ENDCG
         }
