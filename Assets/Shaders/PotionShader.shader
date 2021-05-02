@@ -4,6 +4,8 @@ Shader "Unlit/PotionShader"
     {
         _NormalColor("Normal Color", Color) = (1,0,0,0.1)
         _EffectColor("Effect Color", Color) = (0,1,0,1)
+        _BottleRadius("Bottle Radius", Float) = 1
+        _BottleHeight("Bottle Height", Float) = 2
         _FoamHeight("Foam Height", Float) = 1
     }
     SubShader
@@ -20,10 +22,14 @@ Shader "Unlit/PotionShader"
             // make fog work
             #pragma multi_compile_fog
 
+            #define STEPS 32
+
             #include "UnityCG.cginc"
 
             float4 _NormalColor;
             float4 _EffectColor;
+            float _BottleRadius;
+            float _BottleHeight;
             float _FoamHeight;
 
             struct appdata
@@ -49,8 +55,11 @@ Shader "Unlit/PotionShader"
 
             float4 GetType(float3 worldPos)
             {
-                if (worldPos.y > _FoamHeight)
-                {
+                if (worldPos.y < 0 || worldPos.y > _BottleHeight ||
+                    length(worldPos.xz) > _BottleRadius) {
+                    return float4(0,0,0,0);
+                }
+                if (worldPos.y > _FoamHeight) {
                     return _EffectColor;
                 }
                 return _NormalColor;
