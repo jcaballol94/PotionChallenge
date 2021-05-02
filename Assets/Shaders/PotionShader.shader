@@ -4,6 +4,7 @@ Shader "Unlit/PotionShader"
     {
         _NormalColor("Normal Color", Color) = (1,0,0,0.1)
         _EffectColor("Effect Color", Color) = (0,1,0,1)
+        _FoamHeight("Foam Height", Float) = 1
     }
     SubShader
     {
@@ -23,6 +24,7 @@ Shader "Unlit/PotionShader"
 
             float4 _NormalColor;
             float4 _EffectColor;
+            float _FoamHeight;
 
             struct appdata
             {
@@ -33,6 +35,7 @@ Shader "Unlit/PotionShader"
             {
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float3 worldPos : TEXCOORD0;
             };
 
             v2f vert (appdata v)
@@ -40,13 +43,23 @@ Shader "Unlit/PotionShader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 return o;
+            }
+
+            float4 GetType(float3 worldPos)
+            {
+                if (worldPos.y > _FoamHeight)
+                {
+                    return _EffectColor;
+                }
+                return _NormalColor;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                return fixed4(_NormalColor);
+                return GetType(i.worldPos);
             }
             ENDCG
         }
