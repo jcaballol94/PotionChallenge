@@ -70,6 +70,8 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseSize: 0.03
+    - _NoiseSpeed: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
@@ -83,7 +85,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EffectColor: {r: 0, g: 0.72599363, b: 1, a: 0.14901961}
+    - _EffectColor: {r: 0, g: 0.72599363, b: 1, a: 0.21176471}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _NormalColor: {r: 0.09890127, g: 1, b: 0, a: 0.023529412}
     - _Obstacle: {r: 0, g: 0.1, b: 0, a: 0.1}

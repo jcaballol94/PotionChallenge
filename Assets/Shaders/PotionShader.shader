@@ -11,6 +11,8 @@ Shader "Unlit/PotionShader"
         _WaveSpeed("Wave Speed", Float) = 1
         _WaveFrequency("Wave Freq", Float) = 1
         _WaveAmplitude("Wave Ampl", Float) = 1
+        _NoiseSpeed("Noise Speed", Float) = 2
+        _NoiseSize("Noise Size", Float) = 1
         _Obstacle("Obstacle", Vector) = (0,0,0,1)
     }
     SubShader
@@ -28,7 +30,7 @@ Shader "Unlit/PotionShader"
             #pragma multi_compile_fog
 
             #define STEPS 32
-            #define LIGHT_STEPS 32
+            #define LIGHT_STEPS 16
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -44,6 +46,8 @@ Shader "Unlit/PotionShader"
             float _WaveSpeed;
             float _WaveFrequency;
             float _WaveAmplitude;
+            float _NoiseSpeed;
+            float _NoiseSize;
             float4 _Obstacle;
 
             struct appdata
@@ -91,9 +95,19 @@ Shader "Unlit/PotionShader"
                 return offset * _WaveAmplitude;
             }
 
+            float GetNoise(float3 worldPos)
+            {
+                worldPos.y -= _Time.y * _NoiseSpeed;
+                float noise = snoise(worldPos);
+                noise -= 0.5;
+                return noise * _NoiseSize;
+            }
+
             float4 GetType(float3 worldPos)
             {
-                if (worldPos.y > _FoamHeight || length(worldPos.xz - GetWiggleOffset(worldPos.y)) < _FoamRadius)
+                float noise = GetNoise(worldPos);
+
+                if (worldPos.y > _FoamHeight - noise || length(worldPos.xz - GetWiggleOffset(worldPos.y)) < _FoamRadius + noise)
                     return _EffectColor;
                 return _NormalColor;
             }
