@@ -7,7 +7,7 @@ Shader "Unlit/PotionShader"
         _BottleRadius("Bottle Radius", Float) = 1
         _BottleHeight("Bottle Height", Float) = 2
         _FoamHeight("Foam Height", Float) = 1
-        _Test("Test", Float) = 1
+        _FoamRadius("Foam Radius", Float) = 0.5
     }
     SubShader
     {
@@ -32,7 +32,7 @@ Shader "Unlit/PotionShader"
             float _BottleRadius;
             float _BottleHeight;
             float _FoamHeight;
-            float _Test;
+            float _FoamRadius;
 
             struct appdata
             {
@@ -57,11 +57,12 @@ Shader "Unlit/PotionShader"
 
             float4 GetType(float3 worldPos)
             {
+                float radius = length(worldPos.xz);
                 if (worldPos.y < 0 || worldPos.y > _BottleHeight ||
-                    length(worldPos.xz) > _BottleRadius) {
+                    radius > _BottleRadius) {
                     return float4(0,0,0,0);
                 }
-                if (worldPos.y > _FoamHeight) {
+                if (worldPos.y > _FoamHeight || radius < _FoamRadius) {
                     return _EffectColor;
                 }
                 return _NormalColor;
@@ -71,11 +72,9 @@ Shader "Unlit/PotionShader"
             {
                 float4 finalColor = float4(0,0,0,0);
                 float stepLength = _BottleRadius * 2 / (float)STEPS;
-                float scale = stepLength / _BottleRadius;
-                for (int i = 0; i < STEPS; ++i)
-                {
+                for (int i = 0; i < STEPS; ++i) {
                     float4 type = GetType(worldPos + viewDir * stepLength * i);
-                    type *= scale;
+                    type.rgb *= type.a;
                     finalColor += (1 - finalColor.a) * type;
                 }
 
@@ -85,36 +84,6 @@ Shader "Unlit/PotionShader"
             fixed4 frag (v2f i) : SV_Target
             {
                 return RayCast(i.worldPos, normalize(i.worldPos - _WorldSpaceCameraPos));
-            }
-            ENDCG
-        }
-        // shadow caster rendering pass, implemented manually
-        // using macros from UnityCG.cginc
-        Pass
-        {
-            Tags {"LightMode"="ShadowCaster"}
-            Cull Front
-
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma multi_compile_shadowcaster
-            #include "UnityCG.cginc"
-
-            struct v2f { 
-                V2F_SHADOW_CASTER;
-            };
-
-            v2f vert(appdata_base v)
-            {
-                v2f o;
-                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)
-                return o;
-            }
-
-            float4 frag(v2f i) : SV_Target
-            {
-                SHADOW_CASTER_FRAGMENT(i)
             }
             ENDCG
         }
