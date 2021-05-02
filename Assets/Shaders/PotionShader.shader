@@ -7,6 +7,7 @@ Shader "Unlit/PotionShader"
         _BottleRadius("Bottle Radius", Float) = 1
         _BottleHeight("Bottle Height", Float) = 2
         _FoamHeight("Foam Height", Float) = 1
+        _Test("Test", Float) = 1
     }
     SubShader
     {
@@ -31,6 +32,7 @@ Shader "Unlit/PotionShader"
             float _BottleRadius;
             float _BottleHeight;
             float _FoamHeight;
+            float _Test;
 
             struct appdata
             {
@@ -65,10 +67,24 @@ Shader "Unlit/PotionShader"
                 return _NormalColor;
             }
 
+            float4 RayCast (float3 worldPos, float3 viewDir)
+            {
+                float4 finalColor = float4(0,0,0,0);
+                float stepLength = _BottleRadius * 2 / (float)STEPS;
+                float scale = stepLength / _BottleRadius;
+                for (int i = 0; i < STEPS; ++i)
+                {
+                    float4 type = GetType(worldPos + viewDir * stepLength * i);
+                    type *= scale;
+                    finalColor += (1 - finalColor.a) * type;
+                }
+
+                return finalColor;
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                return GetType(i.worldPos);
+                return RayCast(i.worldPos, normalize(i.worldPos - _WorldSpaceCameraPos));
             }
             ENDCG
         }
