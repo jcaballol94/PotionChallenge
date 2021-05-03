@@ -14,6 +14,7 @@ Shader "Unlit/GlassShader"
         _LiquidStart("Start", Float) = 0
         _LiquidEnd("End", Float) = 1
         _LiquidBottomRounding("Bottom Rounding", Float) = 1
+        _LiquidTopRoundingStart("Top Rounding Start", Float) = 1
 
         [Header(Colors)]
         _LiquidColor("Liquid", Color) = (1,1,1,1)

@@ -68,6 +68,7 @@ Material:
     - _LiquidEnd: 1.33
     - _LiquidRadius: 0.4
     - _LiquidStart: 0.1
+    - _LiquidTopRoundingStart: 1.05
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
