@@ -71,5 +71,6 @@ Shader "Unlit/GlassShader"
             }
             ENDCG
         }
+        UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
     }
 }
