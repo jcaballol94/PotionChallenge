@@ -85,6 +85,9 @@ Material:
     - _SrcBlend: 1
     - _TotalSize: 2
     - _UVSec: 0
+    - _WaveAmplitude: 0.1
+    - _WaveFrequency: 0.46
+    - _WaveSpeed: 1
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.7877358, g: 0.9527757, b: 1, a: 1}

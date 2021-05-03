@@ -32,6 +32,11 @@ Shader "Unlit/GlassShader"
         _RipplesFrequency("Frequency", Float) = 1
         _RipplesAmplitude("Amplitude", Float) = 1
 
+        [Header(Wave)]
+        _WaveSpeed("Speed", Float) = 1
+        _WaveFrequency("Frequency", Float) = 1
+        _WaveAmplitude("Amplitude", Float) = 1
+
     }
     SubShader
     {
