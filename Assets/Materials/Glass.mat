@@ -67,7 +67,7 @@ Material:
     - _Glossiness: 0.886
     - _GlossyReflections: 1
     - _LiquidBottomRounding: 0.1
-    - _LiquidEnd: 1.24
+    - _LiquidEnd: 1.37
     - _LiquidRadius: 0.4
     - _LiquidStart: 0.1
     - _LiquidTopRoundingStart: 1.05
