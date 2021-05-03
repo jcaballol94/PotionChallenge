@@ -7,6 +7,16 @@ Shader "Unlit/GlassShader"
         _FresnelHardness("Fresnel Hardness", Float) = 1
         _SpecularHardness("Specular Hardness", Float) = 1
         _SpecularPower("Specular Power", Float) = 1
+        _TotalSize("Total Size", Float) = 2
+
+        [Header(Liquid Area)]
+        _LiquidRadius("Radius", Float) = 1
+        _LiquidStart("Start", Float) = 0
+        _LiquidEnd("End", Float) = 1
+
+        [Header(Colors)]
+        _LiquidColor("Liquid", Color) = (1,1,1,1)
+
     }
     SubShader
     {
@@ -26,6 +36,7 @@ Shader "Unlit/GlassShader"
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
+            #include "Raycast.cginc"
 
             struct appdata
             {
@@ -70,7 +81,9 @@ Shader "Unlit/GlassShader"
                 intensity = step(0.5, intensity) * _SpecularPower;
 
                 //Sum up the specular light factoring
-                col.rgb += intensity * _LightColor0.rgb; 
+                col.rgb += intensity * _LightColor0.rgb;
+
+                col += (1 - col.a) * RayCast(i.worldPos, viewDir, _WorldSpaceLightPos0.xyz, _LightColor0.rgb);
 
                 return col;
             }

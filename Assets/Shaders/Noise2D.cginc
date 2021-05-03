@@ -8,6 +8,9 @@
 //               https://github.com/ashima/webgl-noise
 // 
 
+#ifndef NOISE_2D
+#define NOISE_2D
+
 #ifndef NOISE_COMMON
 #define NOISE_COMMON
 float3 mod289(float3 x) {
@@ -71,3 +74,5 @@ float snoise(float2 v)
   g.yz = a0.yz * x12.xz + h.yz * x12.yw;
   return 130.0 * dot(m, g);
 }
+
+#endif
