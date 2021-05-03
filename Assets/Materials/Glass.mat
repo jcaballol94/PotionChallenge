@@ -86,7 +86,7 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularPower: 0.7
     - _SrcBlend: 1
-    - _TotalSize: 2
+    - _TotalSize: 1.5
     - _UVSec: 0
     - _WaveAmplitude: 0.2
     - _WaveFrequency: 0.46

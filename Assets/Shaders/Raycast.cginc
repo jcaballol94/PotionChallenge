@@ -3,7 +3,7 @@
 
 #include "SDFs.cginc"
 
-#define STEPS 64
+#define STEPS 32
 #define FULL_ALPHA 0.1
 
 float _TotalSize;
