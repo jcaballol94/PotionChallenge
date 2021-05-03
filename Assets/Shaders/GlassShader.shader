@@ -27,6 +27,11 @@ Shader "Unlit/GlassShader"
         [Header(Floating ball)]
         _FloatingBall("Floating Ball (POS, R)", Vector) = (0,1,0,0.1)
 
+        [Header(Ripples)]
+        _RipplesSpeed("Speed", Float) = 1
+        _RipplesFrequency("Frequency", Float) = 1
+        _RipplesAmplitude("Amplitude", Float) = 1
+
     }
     SubShader
     {

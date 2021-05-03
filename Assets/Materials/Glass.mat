@@ -75,6 +75,9 @@ Material:
     - _Mode: 3
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RipplesAmplitude: 0.05
+    - _RipplesFrequency: 2
+    - _RipplesSpeed: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHardness: 25.45
     - _SpecularHighlights: 1
