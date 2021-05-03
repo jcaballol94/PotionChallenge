@@ -19,6 +19,9 @@ Shader "Unlit/GlassShader"
         [Header(Colors)]
         _LiquidColor("Liquid", Color) = (1,1,1,1)
 
+        [Header(Floating ball)]
+        _FloatingBall("Floating Ball (POS, R)", Vector) = (0,1,0,0.1)
+
     }
     SubShader
     {
