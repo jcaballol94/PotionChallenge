@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Ambient: 0.31
-    - _BottleHeight: 1.61
+    - _BottleHeight: 1.8
     - _BottleRadius: 0.51
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -90,8 +90,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EffectColor: {r: 0, g: 0.72599363, b: 1, a: 0.21176471}
+    - _EffectColor: {r: 0, g: 0.71844625, b: 1, a: 0.2509804}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NormalColor: {r: 0, g: 1, b: 0.41486025, a: 0.03137255}
+    - _NormalColor: {r: 0.31199998, g: 0.9568314, b: 1, a: 0.019607844}
     - _Obstacle: {r: 0, g: 0.1, b: 0, a: 0.1}
   m_BuildTextureStacks: []
