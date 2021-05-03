@@ -25,6 +25,7 @@ float LiquidSDF(float3 worldPos)
   float distance = CylinderSDF(worldPos, _LiquidRadius - _LiquidBottomRounding, _LiquidStart + _LiquidBottomRounding, _LiquidTopRoundingStart);
   distance -= _LiquidBottomRounding;
   distance = min(distance, SphereSDF(worldPos, float3(0, _LiquidTopRoundingStart, 0), _LiquidRadius));
+  distance = max(distance, worldPos.y - _LiquidEnd);
   return distance;
 }
 
