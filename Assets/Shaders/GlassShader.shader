@@ -37,6 +37,11 @@ Shader "Unlit/GlassShader"
         _WaveFrequency("Frequency", Float) = 1
         _WaveAmplitude("Amplitude", Float) = 1
 
+        [Header(Noise)]
+        _NoiseSpeed("Speed", Float) = 2
+        _NoiseFrequency("Frequency", Float) = 1
+        _NoiseAmplitude("Amplitude", Float) = 1
+
     }
     SubShader
     {

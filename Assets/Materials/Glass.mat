@@ -73,6 +73,9 @@ Material:
     - _LiquidTopRoundingStart: 1.05
     - _Metallic: 0
     - _Mode: 3
+    - _NoiseAmplitude: 0.2
+    - _NoiseFrequency: 4
+    - _NoiseSpeed: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RipplesAmplitude: 0.05
@@ -85,7 +88,7 @@ Material:
     - _SrcBlend: 1
     - _TotalSize: 2
     - _UVSec: 0
-    - _WaveAmplitude: 0.1
+    - _WaveAmplitude: 0.2
     - _WaveFrequency: 0.46
     - _WaveSpeed: 1
     - _ZWrite: 0

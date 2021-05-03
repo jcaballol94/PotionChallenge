@@ -21,6 +21,10 @@ float _WaveSpeed;
 float _WaveFrequency;
 float _WaveAmplitude;
 
+float _NoiseSpeed;
+float _NoiseFrequency;
+float _NoiseAmplitude;
+
 float CylinderSDF(float3 worldPos, float2 center, float radius, float start, float end)
 {
   float2 compDist = float2(length(worldPos.xz - center) - radius, max(worldPos.y - end, start - worldPos.y));
@@ -66,8 +70,10 @@ float FoamSDF(float3 worldPos, float3 ballPos)
   float heightNoise = smoothstep(ballPos.y, _FoamUpperStart, worldPos.y);
   float2 cylinderCenter = GetWiggleOffset(worldPos.y);
   cylinderCenter *= heightNoise;
-  distance = min(distance, SphereSDF(worldPos, ballPos, _FoamRadius));
-  distance = min(distance, CylinderSDF(worldPos, cylinderCenter, _FoamRadius, ballPos.y, _FoamUpperStart));
+  float noise = GetNoise(worldPos, _NoiseSpeed, _NoiseFrequency, _NoiseAmplitude);
+  noise *= heightNoise;
+  distance = min(distance, SphereSDF(worldPos, ballPos, _FoamRadius) - noise);
+  distance = min(distance, CylinderSDF(worldPos, cylinderCenter, _FoamRadius, ballPos.y, _FoamUpperStart) - noise);
   return distance;
 }
 
