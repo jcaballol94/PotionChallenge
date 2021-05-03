@@ -60,12 +60,14 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
+    - _FoamRadius: 0.15
+    - _FoamUpperStart: 0.93
     - _FresnelHardness: 3.45
     - _GlossMapScale: 1
     - _Glossiness: 0.886
     - _GlossyReflections: 1
     - _LiquidBottomRounding: 0.1
-    - _LiquidEnd: 1.33
+    - _LiquidEnd: 1.24
     - _LiquidRadius: 0.4
     - _LiquidStart: 0.1
     - _LiquidTopRoundingStart: 1.05
@@ -85,5 +87,6 @@ Material:
     - _Color: {r: 0.7877358, g: 0.9527757, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FloatingBall: {r: 0, g: 0.281, b: 0, a: 0.1}
+    - _FoamColor: {r: 0.511, g: 1, b: 0.56876355, a: 0.5686275}
     - _LiquidColor: {r: 0.43543077, g: 0.9568581, b: 0.9716981, a: 0.078431375}
   m_BuildTextureStacks: []

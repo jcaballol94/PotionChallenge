@@ -8,6 +8,7 @@
 
 float _TotalSize;
 float4 _LiquidColor;
+float4 _FoamColor;
 float4 _FloatingBall;
 
 float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightColor)
@@ -15,6 +16,7 @@ float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightCo
     float4 finalColor = float4(0,0,0,0);
     float prevDistToLiquid = 1000;
     float prevDistToBall = 1000;
+    float prevDistToFoam = 1000;
     float seeThrough = 1;
 
     float stepLength = _TotalSize / (float)STEPS;
@@ -22,6 +24,14 @@ float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightCo
 
     for (int i = 0; i < STEPS; ++i) {
         float3 pos = worldPos + viewDir * stepLength * i;
+        
+        // Calculate the foam area
+        float distToFoam = FoamSDF(pos, _FloatingBall);
+        float prevFoam = step(prevDistToFoam, 0);
+        float newFoam = step(distToFoam, 0);
+        float foam = lerp(prevFoam, newFoam, 1 - smoothstep(prevDistToFoam, distToFoam, 0));
+        prevDistToFoam = distToFoam;
+        float4 color = lerp(_LiquidColor, _FoamColor, foam);
 
         // Calculate the bottle outside
         float distToLiquid = LiquidSDF(pos);
@@ -29,7 +39,7 @@ float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightCo
         float newOutside = step(0, distToLiquid);
         float outside = lerp(prevOutside, newOutside, 1 - smoothstep(prevDistToLiquid, distToLiquid, 0));
         prevDistToLiquid = distToLiquid;
-        float4 color = lerp(_LiquidColor, float4(0,0,0,0), outside);
+        color = lerp(color, float4(0,0,0,0), outside);
         
         // Calculate the ball
         float distToBall = SphereSDF(pos, _FloatingBall.xyz, _FloatingBall.w);

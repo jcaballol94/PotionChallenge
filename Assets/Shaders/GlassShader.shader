@@ -16,8 +16,13 @@ Shader "Unlit/GlassShader"
         _LiquidBottomRounding("Bottom Rounding", Float) = 1
         _LiquidTopRoundingStart("Top Rounding Start", Float) = 1
 
+        [Header(Foam Area)]
+        _FoamUpperStart("Upper Start", Float) = 1
+        _FoamRadius("Radius", Float) = 1
+
         [Header(Colors)]
         _LiquidColor("Liquid", Color) = (1,1,1,1)
+        _FoamColor("Foam", Color) = (1,1,1,1)
 
         [Header(Floating ball)]
         _FloatingBall("Floating Ball (POS, R)", Vector) = (0,1,0,0.1)

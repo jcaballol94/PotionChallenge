@@ -7,6 +7,9 @@ float _LiquidEnd;
 float _LiquidBottomRounding;
 float _LiquidTopRoundingStart;
 
+float _FoamUpperStart;
+float _FoamRadius;
+
 float CylinderSDF(float3 worldPos, float radius, float start, float end)
 {
   float2 compDist = float2(length(worldPos.xz) - radius, max(worldPos.y - end, start - worldPos.y));
@@ -26,6 +29,14 @@ float LiquidSDF(float3 worldPos)
   distance -= _LiquidBottomRounding;
   distance = min(distance, SphereSDF(worldPos, float3(0, _LiquidTopRoundingStart, 0), _LiquidRadius));
   distance = max(distance, worldPos.y - _LiquidEnd);
+  return distance;
+}
+
+float FoamSDF(float3 worldPos, float3 ballPos)
+{
+  float distance = _FoamUpperStart - worldPos.y;
+  distance = min(distance, SphereSDF(worldPos, ballPos, _FoamRadius));
+  distance = min(distance, CylinderSDF(worldPos, _FoamRadius, ballPos.y, _FoamUpperStart));
   return distance;
 }
 
