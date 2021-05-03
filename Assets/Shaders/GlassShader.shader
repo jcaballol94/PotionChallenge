@@ -2,7 +2,9 @@ Shader "Unlit/GlassShader"
 {
     Properties
     {
+        [Header(Bottle)]
         _Color("Color", Color) = (1,1,1,1)
+        _FresnelHardness("Fresnel Hardness", Float) = 1
         _SpecularHardness("Specular Hardness", Float) = 1
         _SpecularPower("Specular Power", Float) = 1
     }
@@ -48,16 +50,19 @@ Shader "Unlit/GlassShader"
             }
 
             float4 _Color;
+            float _FresnelHardness;
             float _SpecularHardness;
             float _SpecularPower;
 
             fixed4 frag (v2f i) : SV_Target
             {
+                float3 viewDir = normalize(i.worldPos - _WorldSpaceCameraPos);
+
                 float4 col = _Color;
+                col.a *= pow(saturate(1 - dot(i.normal, -viewDir)), _FresnelHardness);
                 col.rgb *= col.a;
 
-                float3 viewDir = -normalize(i.worldPos - _WorldSpaceCameraPos);
-                float3 H = normalize(_WorldSpaceLightPos0.xyz + viewDir);
+                float3 H = normalize(_WorldSpaceLightPos0.xyz - viewDir);
 
                 //Intensity of the specular light
                 float NdotH = dot(i.normal, H);
