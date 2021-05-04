@@ -61,7 +61,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _FoamRadius: 0.15
-    - _FoamUpperStart: 0.93
+    - _FoamUpperStart: 1.1
     - _FresnelHardness: 3.45
     - _GlossMapScale: 1
     - _Glossiness: 0.886
