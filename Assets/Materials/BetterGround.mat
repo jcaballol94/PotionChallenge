@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glass
-  m_Shader: {fileID: 4800000, guid: 61336bb5bf383f64ebace9cda42b1ec1, type: 3}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
+  m_Name: BetterGround
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3001
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -59,43 +59,20 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DstBlend: 10
-    - _FoamRadius: 0.15
-    - _FoamUpperStart: 0.93
-    - _FresnelHardness: 3.45
+    - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.886
+    - _Glossiness: 0.046
     - _GlossyReflections: 1
-    - _LiquidBottomRounding: 0.1
-    - _LiquidEnd: 1.37
-    - _LiquidRadius: 0.4
-    - _LiquidStart: 0.1
-    - _LiquidTopRoundingStart: 1.05
     - _Metallic: 0
-    - _Mode: 3
-    - _NoiseAmplitude: 0.2
-    - _NoiseFrequency: 4
-    - _NoiseSpeed: 2
+    - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RipplesAmplitude: 0.05
-    - _RipplesFrequency: 2
-    - _RipplesSpeed: 1
     - _SmoothnessTextureChannel: 0
-    - _SpecularHardness: 25.45
     - _SpecularHighlights: 1
-    - _SpecularPower: 0.7
     - _SrcBlend: 1
-    - _TotalSize: 1.5
     - _UVSec: 0
-    - _WaveAmplitude: 0.2
-    - _WaveFrequency: 0.46
-    - _WaveSpeed: 1
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.7877358, g: 0.9527757, b: 1, a: 1}
+    - _Color: {r: 0.866, g: 0.64207554, b: 0.348998, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FloatingBall: {r: 0, g: 0.281, b: 0, a: 0}
-    - _FoamColor: {r: 0.23921567, g: 0.6627451, b: 0.4926837, a: 0.45490196}
-    - _LiquidColor: {r: 0.31764707, g: 0.70980394, b: 0.6852671, a: 0.09803922}
   m_BuildTextureStacks: []

@@ -90,7 +90,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EffectColor: {r: 0, g: 0.71844625, b: 1, a: 0.2509804}
+    - _EffectColor: {r: 0.11584568, g: 1, b: 0, a: 0.2509804}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _NormalColor: {r: 0.31199998, g: 0.9568314, b: 1, a: 0.019607844}
     - _Obstacle: {r: 0, g: 0.1, b: 0, a: 0.1}

@@ -3,8 +3,8 @@
 
 #include "SDFs.cginc"
 
-#define STEPS 16
-#define LIGHT_STEPS 8
+#define STEPS 32
+#define LIGHT_STEPS 32
 #define FULL_ALPHA 0.1
 
 float _TotalSize;
@@ -56,9 +56,14 @@ float LightRayCast (float3 worldPos, float3 lightDir)
     return 1 - finalOpacity;
 }
 
+float CellShading(float intensity, int numBands)
+{
+  return ceil(intensity * numBands) / numBands;
+}
+
 float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightColor)
 {
-    float4 finalColor = float4(0,0,0,0);
+    float4 finalColor = float4(0,0,1,0);
     float prevDistToLiquid = 1000;
     float prevDistToBall = 1000;
     float prevDistToFoam = 1000;
@@ -76,7 +81,7 @@ float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightCo
         float newFoam = step(distToFoam, 0);
         float foam = lerp(prevFoam, newFoam, 1 - smoothstep(prevDistToFoam, distToFoam, 0));
         prevDistToFoam = distToFoam;
-        float4 color = lerp(_LiquidColor, _FoamColor, foam);
+        float4 color = lerp(float4(1,0,1,_LiquidColor.a), float4(0,1,1,_FoamColor.a), foam);
 
         // Calculate the bottle outside
         float distToLiquid = LiquidSDF(pos);
@@ -94,12 +99,17 @@ float4 RayCast (float3 worldPos, float3 viewDir, float3 lightDir, float3 lightCo
         prevDistToBall = prevBall;
         seeThrough = min(seeThrough, 1 - ball);
 
-        color.rgb *= lightColor * LightRayCast(pos, lightDir);
+        color.b *= LightRayCast(pos, lightDir);
         color.a *= scale;
         color.rgb *= color.a;
         finalColor += seeThrough * (1 - finalColor.a) * color;
     }
 
-    return finalColor;
+    float lightIntensity = CellShading(finalColor.z, 3);
+    float4 postProcessedColor = lerp(_LiquidColor, _FoamColor, step(finalColor.x, finalColor.y));
+    postProcessedColor *= lightIntensity;
+    postProcessedColor.a = finalColor.a;
+    postProcessedColor.rgb *= postProcessedColor.a;
+    return postProcessedColor;
 }
 #endif
